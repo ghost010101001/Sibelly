@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💖Sibelly 💖</title>
+  <style>
+    /*
+    Reset básico para remover margens e padding padrão
+    */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /*
+    Estilo geral do body: fonte, cor, background gradiente e transição suave
+    */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #ffe4e1, #ffc0cb);
+      overflow-x: hidden;
+      color: #800000;
+      transition: background 1s ease;
+    }
+
+    /*
+    Tela inicial de boas-vindas (tela rosa)
+    */
+    #welcome-screen {
+      height: 100vh;
+      background: #ffb6c1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 2s;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #welcome-screen h1 {
+      font-size: 2.5em;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    /*
+    Botão da tela inicial
+    */
+    #welcome-screen button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      background: #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      border: 2px solid #000;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    #welcome-screen button:hover {
+      transform: scale(1.1);
+      background: #f0f0f0;
+    }
+
+    /*
+    Botão para controlar a música no topo direito
+    */
+    .music-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 999;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      transition: background 0.3s ease;
+    }
+
+    .music-toggle:hover {
+      background: #ffe4e1;
+    }
+
+    /*
+    Container para texto digitando efeito máquina de escrever
+    */
+    .typing-container {
+      margin: 40px 20px;
+      font-size: 1.5em;
+      text-align: center;
+      min-height: 60px;
+      font-weight: 600;
+      color: #b22222;
+    }
+
+    /*
+    Container do slideshow das fotos
+    */
+    .slideshow-container {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 20px auto;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(255,105,180,0.5);
+    }
+
+    /*
+    Cada foto do slideshow
+    */
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 15px;
+      display: none;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      user-select: none;
+    }
+
+    .slide.active {
+      display: block;
+      animation: fadeIn 2s;
+    }
+
+    /*
+    Botões grandes para interação
+    */
+    .button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      background: #ff69b4;
+      color: white;
+      border-radius: 20px;
+      margin: 15px auto;
+      display: block;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      box-shadow: 0 5px 10px rgba(255,20,147,0.4);
+    }
+
+    .button:hover {
+      transform: scale(1.05);
+      background: #ff1493;
+      box-shadow: 0 8px 20px rgba(255,20,147,0.7);
+    }
+
+    /*
+    Textos secretos, frases aleatórias e carta de amor
+    */
+    #secret-message, #random-phrase, #love-letter {
+      text-align: center;
+      font-size: 1.3em;
+      margin: 10px auto 30px auto;
+      padding: 10px 20px;
+      animation: fadeInUp 1s;
+      display: none;
+      max-width: 90%;
+      background: #fff0f6;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(255,20,147,0.3);
+      color: #a3003f;
+      user-select: none;
+    }
+
+    /*
+    Container do vídeo especial
+    */
+    .video-container {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .video-container h2 {
+      color: #b22222;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .video-container video {
+      width: 90%;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      user-select: none;
+    }
+
+    /*
+    Corações flutuantes de fundo com animação
+    */
+    .hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      top: -10px;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: fall linear;
+      opacity: 0.8;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    /*
+    Botão discreto para trocar o fundo no canto inferior esquerdo
+    */
+    .background-toggle {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      padding: 10px 15px;
+      background: #fff;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+      opacity: 0.6;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+
+    .background-toggle:hover {
+      opacity: 1;
+    }
+
+    /*
+    Animações usadas
+    */
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /*
+    Responsividade para telas pequenas
+    */
+    @media (max-width: 600px) {
+      .slide, .video-container video {
+        width: 90%;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tela inicial com botão para entrar no site -->
+  <div id="welcome-screen">
+    <h1>O Giovanni ama mais? </h1>
+    <button onclick="enterSite()">Simmm😁</button>
+    <button onclick="alert('Resposta errada')">Não😒</button>
+  </div>
+
+  <!-- Conteúdo principal, inicialmente oculto -->
+  <div id="main-content" style="display: none;">
+    <!-- Música de fundo -->
+    <audio id="music" autoplay loop>
+      <source src="Lagum - Deixa (Letra) ft. Ana Gabriela [cdQROwNBX4Q].mp3" type="audio/mpeg">
+      Seu navegador não suporta áudio.
+    </audio>
+
+    <!-- Botão para ligar/desligar música -->
+    <button class="music-toggle" onclick="toggleMusic()">Música🎵</button>
+
+    <!-- Texto digitando frases -->
+    <div class="typing-container">
+      <span id="typing-text"></span>
+    </div>
+
+    <!-- Slideshow das fotos -->
+    <div class="slideshow-container">
+      <img src="50e7be52-3f1a-45e9-aec2-0149134a371a.png" alt="Foto 1" class="slide" />
+      <img src="8e2f3345f3db1a11b321bbf227e78841.jpg" alt="Foto 2" class="slide" />
+      <img src="m000621788.webp" alt="Foto 3" class="slide" />
+      <img src="WhatsApp Image 2025-08-20 at 20.13.43.jpeg" alt="Foto 4" class="slide" />
+      <img src="WhatsApp Image 2025-08-20 at 20.13.43 (1).jpeg" alt="Foto 5" class="slide" />
+      <img src="WhatsApp Image 2025-08-20 at 20.13.44.jpeg" alt="Foto 6" class="slide" />
+    </div>
+
+    <!-- Botão para mostrar mensagem secreta -->
+    <button class="button" onclick="showSecret()">💖 Clique aqui 💖</button>
+    <div id="secret-message">
+      Amor, eu não poderia esquecer do dia de hoje. E eu não poderia deixar de te dizer o quanto a minha vida mudou desde que começamos a namorar. Você e capaz de me animar todos os dias e você consegue ser a melhor namorada do mundo todo. Você consegue tornar meus dias muito melhores e mais felizes, você me faz ser o homem mais feliz do mundo. Obrigado por cada eu te amo que você ja disse, por tudo que você faz por min.❤️
+    </div>
+
+    <!-- Botão para mostrar frase aleatória -->
+    <button class="button" onclick="showRandomPhrase()">💌 Clique varias vezes 💌</button>
+    <div id="random-phrase"></div>
+
+    <!-- Carta de amor -->
+    <button class="button" onclick="showLoveLetter()">📜</button>
+    <div id="love-letter">
+      Minha neném,<br>
+      você é a luz da minha vida, a razão do meu sorriso. Quero estar ao seu lado para sempre. <br>
+      Eu te amo eternamente! ❤️
+    </div>
+
+    <!-- Vídeo especial -->
+    <div class="video-container">
+      <h2>Vídeo Especial para Você</h2>
+      <video controls>
+        <source src="WhatsApp Video 2025-06-15 at 19.03.26.mp4" type="video/mp4" />
+        Seu navegador não suporta vídeo.
+      </video>
+    </div>
+
+    <!-- AQUI: INSERÇÃO DO CONTADOR TEMPO JUNTOS -->
+    <section id="contador-tempo-juntos" style="text-align:center; margin: 50px 20px; color: #b22222;">
+      <h1>💗 Des o dia 21/01/2025, se passaram 💗</h1>
+
+      <div class="contador" style="display:flex; justify-content:center; flex-wrap: wrap; gap: 15px; margin-top: 20px;">
+        <div class="bloco" style="min-width: 70px;">
+          <div class="numero" id="anos" style="font-size: 2.5em; font-weight: bold;">0</div>
+          <div class="legenda">anos</div>
+        </div>
+        <div class="bloco" style="min-width: 70px;">
+          <div class="numero" id="meses" style="font-size: 2.5em; font-weight: bold;">0</div>
+          <div class="legenda">meses</div>
+        </div>
+        <div class="bloco" style="min-width: 70px;">
+          <div class="numero" id="dias" style="font-size: 2.5em; font-weight: bold;">0</div>
+          <div class="legenda">dias</div>
+        </div>
+        <div class="bloco" style="min-width: 70px;">
+          <div class="numero" id="horas" style="font-size: 2.5em; font-weight: bold;">0</div>
+          <div class="legenda">horas</div>
+        </div>
+        <div class="bloco" style="min-width: 70px;">
+          <div class="numero" id="minutos" style="font-size: 2.5em; font-weight: bold;">0</div>
+          <div class="legenda">minutos</div>
+        </div>
+        <div class="bloco" style="min-width: 70px;">
+          <div class="numero" id="segundos" style="font-size: 2.5em; font-weight: bold;">0</div>
+          <div class="legenda">segundos</div>
+          <h1>Ou 212 dias</h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fundo com corações animados -->
+    <div class="hearts"></div>
+
+    <!-- Botão para trocar o fundo -->
+    <button class="background-toggle" onclick="toggleBackground()">Trocar Fundo</button>
+  </div>
+
+  <script>
+    // Função para entrar no site (ocultar tela inicial e mostrar conteúdo)
+    function enterSite() {
+      document.getElementById('welcome-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      startTyping();
+      startSlideshow();
+      startHearts();
+      atualizarContador();
+      setInterval(atualizarContador, 1000);
+    }
+
+    // Música: ligar/desligar
+    const music = document.getElementById('music');
+    function toggleMusic() {
+      if (music.paused) {
+        music.play();
+      } else {
+        music.pause();
+      }
+    }
+
+    // Textos para digitar no efeito máquina de escrever
+    const frases = [
+      "Você é tudo para min amor^_^",
+      "A felicidade dos meus dias e conversar com você😊",
+      "❤️Eu te amo mil milhões❤️",
+      "Obrigado por existir na minha vida",
+      "Você ama mais(●'◡'●)"
+    ];
+
+    // Efeito de digitação
+    let fraseAtual = 0;
+    let letraAtual = 0;
+    const typingSpeed = 90;
+    const typingElement = document.getElementById('typing-text');
+
+    function startTyping() {
+      if (!typingElement) return;
+      letraAtual = 0;
+      typingElement.textContent = '';
+      digitar();
+    }
+
+    function digitar() {
+      if (letraAtual < frases[fraseAtual].length) {
+        typingElement.textContent += frases[fraseAtual].charAt(letraAtual);
+        letraAtual++;
+        setTimeout(digitar, typingSpeed);
+      } else {
+        setTimeout(() => {
+          apagar();
+        }, 1500);
+      }
+    }
+
+    function apagar() {
+      if (letraAtual > 0) {
+        typingElement.textContent = frases[fraseAtual].substring(0, letraAtual -1);
+        letraAtual--;
+        setTimeout(apagar, 40);
+      } else {
+        fraseAtual = (fraseAtual + 1) % frases.length;
+        setTimeout(digitar, 300);
+      }
+    }
+
+    // Slideshow simples de fotos
+    const slides = document.querySelectorAll('.slide');
+    let slideIndex = 0;
+
+    function startSlideshow() {
+      if (slides.length === 0) return;
+      slides.forEach(s => s.classList.remove('active'));
+      slides[slideIndex].classList.add('active');
+      setInterval(() => {
+        slides[slideIndex].classList.remove('active');
+        slideIndex = (slideIndex + 1) % slides.length;
+        slides[slideIndex].classList.add('active');
+      }, 4000);
+    }
+
+    // Mensagem secreta aparece e desaparece
+    function showSecret() {
+      const secret = document.getElementById('secret-message');
+      if (secret.style.display === 'block') {
+        secret.style.display = 'none';
+      } else {
+        secret.style.display = 'block';
+      }
+    }
+
+    // Frases aleatórias
+    const frasesAleatorias = [
+      "Sem você eu não seria feliz.",
+      "Seu neném te amo muitooo.",
+      "Cada conversa nossa é inesquecível.",
+      "Você sempre séra minha gatinha linda e gostosa.",
+      "Eu te amo mais do que ontem e menos que amanhã."
+    ];
+
+    function showRandomPhrase() {
+      const phraseBox = document.getElementById('random-phrase');
+      const index = Math.floor(Math.random() * frasesAleatorias.length);
+      phraseBox.textContent = frasesAleatorias[index];
+      phraseBox.style.display = 'block';
+    }
+
+    // Mostrar carta de amor
+    function showLoveLetter() {
+      const letter = document.getElementById('love-letter');
+      letter.style.display = (letter.style.display === 'block') ? 'none' : 'block';
+    }
+
+    // Animação de corações flutuantes
+    function startHearts() {
+      const heartsContainer = document.querySelector('.hearts');
+      if (!heartsContainer) return;
+
+      function createHeart() {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.animationDuration = (3 + Math.random() * 5) + 's';
+        heart.style.opacity = Math.random();
+        heartsContainer.appendChild(heart);
+
+        setTimeout(() => {
+          heartsContainer.removeChild(heart);
+        }, 8000);
+      }
+
+      setInterval(createHeart, 400);
+    }
+
+    // Trocar fundo entre gradientes
+    let fundoAtual = 0;
+    const fundos = [
+      'linear-gradient(to bottom right, #ffe4e1, #ffc0cb)',
+      'linear-gradient(to bottom right, #b19cd9, #fbc3bc)',
+      'linear-gradient(to bottom right, #a8edea, #fed6e3)'
+    ];
+
+    function toggleBackground() {
+      fundoAtual = (fundoAtual + 1) % fundos.length;
+      document.body.style.background = fundos[fundoAtual];
+    }
+
+    // Contador "Des do dia 21/01/2025 se passaram"
+
+    // Data do início do relacionamento (ano, mês - zero indexado, dia, hora, min, seg)
+    const dataInicio = new Date(2025, 0, 20, 22, 52, 0); // 20 jan 2025 22:52
+
+    function atualizarContador() {
+      const agora = new Date();
+      let diffMs = agora - dataInicio;
+
+      if(diffMs < 0) {
+        diffMs = 0; // evita números negativos se a data estiver no futuro
+      }
+
+      // Calcular anos, meses, dias, horas, minutos e segundos
+
+      // Para maior precisão vamos calcular usando data, não só milissegundos
+
+      const dataAgora = new Date(agora);
+      const dataInicioCopy = new Date(dataInicio);
+
+      let anos = dataAgora.getFullYear() - dataInicioCopy.getFullYear();
+      let meses = dataAgora.getMonth() - dataInicioCopy.getMonth();
+      let dias = dataAgora.getDate() - dataInicioCopy.getDate();
+      let horas = dataAgora.getHours() - dataInicioCopy.getHours();
+      let minutos = dataAgora.getMinutes() - dataInicioCopy.getMinutes();
+      let segundos = dataAgora.getSeconds() - dataInicioCopy.getSeconds();
+
+      if(segundos < 0) {
+        segundos += 60;
+        minutos--;
+      }
+      if(minutos < 0) {
+        minutos += 60;
+        horas--;
+      }
+      if(horas < 0) {
+        horas += 24;
+        dias--;
+      }
+      if(dias < 0) {
+        // Pega último dia do mês anterior
+        const ultimoDiaMesAnterior = new Date(dataAgora.getFullYear(), dataAgora.getMonth(), 0).getDate();
+        dias += ultimoDiaMesAnterior;
+        meses--;
+      }
+      if(meses < 0) {
+        meses += 12;
+        anos--;
+      }
+
+      document.getElementById('anos').textContent = anos;
+      document.getElementById('meses').textContent = meses;
+      document.getElementById('dias').textContent = dias;
+      document.getElementById('horas').textContent = horas;
+      document.getElementById('minutos').textContent = minutos;
+      document.getElementById('segundos').textContent = segundos;
+    }
+  </script>
+<!-- ... (todo o conteúdo anterior do seu site) ... -->
+</body>
+</html>
